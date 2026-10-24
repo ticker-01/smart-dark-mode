@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Dark Engine",
+  "version": "0.1.0",
+  "description": "Universal adaptive dark mode engine with real-time surface neutralization, custom color palette studio, and visual atmosphere effects.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Smart Dark Engine Settings"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "commands": {
+    "toggle-dark-mode": {
+      "suggested_key": {
+        "default": "Alt+Shift+D",
+        "mac": "Alt+Shift+D"
+      },
+      "description": "Toggle Smart Dark Mode on current tab"
+    }
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content/engine.css"],
+      "js": ["content/engine.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

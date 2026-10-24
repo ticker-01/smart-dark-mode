@@ -1,0 +1,294 @@
+/* ==========================================================================
+   Smart Dark Engine v0.1.0 - Universal CSSOM & Omni-Surface Stylesheet
+   Pure mathematical dark transformation with custom atmosphere effects.
+   ========================================================================== */
+
+:root {
+  --sdm-bg: #121418;
+  --sdm-surface: #1a1d24;
+  --sdm-surface-elevated: #242832;
+  --sdm-border: rgba(255, 255, 255, 0.10);
+  --sdm-text: #e6edf3;
+  --sdm-text-muted: #94a3b8;
+  --sdm-link: #58a6ff;
+  --sdm-media-brightness: 92%;
+  --sdm-effect-opacity: 0.5;
+  --sdm-warmth-opacity: 0;
+}
+
+/* ==========================================================================
+   1. Universal Canvas & Framework CSS Variables Override
+   Instantly overrides design systems (Pinterest Gestalt, Tailwind, Material)
+   ========================================================================== */
+html[data-sdm-active="true"] {
+  background-color: var(--sdm-bg, #121418) !important;
+  color: var(--sdm-text, #e6edf3) !important;
+  color-scheme: dark !important;
+  min-height: 100vh !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* Universal framework design-token overrides */
+  --g-colorBackground: var(--sdm-bg, #121418) !important;
+  --sema-color-background-default: var(--sdm-bg, #121418) !important;
+  --sema-color-background-surface: var(--sdm-surface, #1a1d24) !important;
+  --sema-color-text-default: var(--sdm-text, #e6edf3) !important;
+  --sema-color-text-subtle: var(--sdm-text-muted, #94a3b8) !important;
+  --background: var(--sdm-bg, #121418) !important;
+  --surface: var(--sdm-surface, #1a1d24) !important;
+  --bg-color: var(--sdm-bg, #121418) !important;
+  --text-color: var(--sdm-text, #e6edf3) !important;
+  --surface-color: var(--sdm-surface, #1a1d24) !important;
+  --border-color: var(--sdm-border, rgba(255, 255, 255, 0.10)) !important;
+}
+
+html[data-sdm-active="true"] body {
+  background-color: var(--sdm-bg, #121418) !important;
+  color: var(--sdm-text, #e6edf3) !important;
+  min-height: 100vh !important;
+}
+
+/* ==========================================================================
+   2. Structural Surfaces: Headers, Navbars, Sticky Bars, Tabs
+   Eliminates blinding white strips on dynamic SPAs (Pinterest, Google, Twitter)
+   ========================================================================== */
+html[data-sdm-active="true"] header,
+html[data-sdm-active="true"] nav,
+html[data-sdm-active="true"] [role="banner"],
+html[data-sdm-active="true"] [role="navigation"],
+html[data-sdm-active="true"] [role="tablist"],
+html[data-sdm-active="true"] [role="tab"],
+html[data-sdm-active="true"] [data-test-id*="header"],
+html[data-sdm-active="true"] [data-test-id*="nav"],
+html[data-sdm-active="true"] [data-test-id*="tab"],
+html[data-sdm-active="true"] [class*="header"],
+html[data-sdm-active="true"] [class*="Header"],
+html[data-sdm-active="true"] [class*="navbar"],
+html[data-sdm-active="true"] [class*="Navbar"],
+html[data-sdm-active="true"] [class*="topbar"],
+html[data-sdm-active="true"] [class*="Topbar"],
+html[data-sdm-active="true"] [class*="subnav"],
+html[data-sdm-active="true"] [class*="tablist"],
+html[data-sdm-active="true"] [class*="TabBar"],
+html[data-sdm-active="true"] [data-sdm-neutralized="true"] {
+  background-color: var(--sdm-bg, #121418) !important;
+  color: var(--sdm-text, #e6edf3) !important;
+  border-color: var(--sdm-border, rgba(255, 255, 255, 0.10)) !important;
+}
+
+/* ==========================================================================
+   3. Universal SVG & Button Visibility Safeguard
+   Fixes invisible sidebar icons, navigation controls, and monochrome symbols.
+   ========================================================================== */
+html[data-sdm-active="true"] button,
+html[data-sdm-active="true"] [role="button"],
+html[data-sdm-active="true"] [role="tab"],
+html[data-sdm-active="true"] .btn,
+html[data-sdm-active="true"] .button {
+  color: var(--sdm-text, #e6edf3) !important;
+  border-color: var(--sdm-border, rgba(255, 255, 255, 0.10)) !important;
+}
+
+/* SVG icons must inherit text color to remain sharp and visible */
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) {
+  color: var(--sdm-text, #e6edf3) !important;
+}
+
+/* Monochrome fills adapt to light */
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) path:not([fill="none"]):not([data-sdm-logo="true"]),
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) circle:not([fill="none"]):not([data-sdm-logo="true"]),
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) rect:not([fill="none"]):not([data-sdm-logo="true"]),
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) polygon:not([fill="none"]):not([data-sdm-logo="true"]) {
+  fill: currentColor !important;
+}
+
+/* Monochrome strokes adapt to light */
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) path[stroke]:not([stroke="none"]),
+html[data-sdm-active="true"] svg:not([role="img"]):not([data-sdm-media="true"]) circle[stroke]:not([stroke="none"]) {
+  stroke: currentColor !important;
+}
+
+/* Preserve branded logos like the Pinterest red badge */
+html[data-sdm-active="true"] [aria-label*="logo"] svg path[fill="#E60023"],
+html[data-sdm-active="true"] [aria-label*="logo"] svg path[fill="red"],
+html[data-sdm-active="true"] [data-sdm-logo="true"] path {
+  fill: #e60023 !important;
+}
+
+/* ==========================================================================
+   4. Background Atmosphere Effects (Matte, Ambient, Glass, Vignette, Aurora)
+   ========================================================================== */
+
+/* Ambient Glow: Soft celestial radial illumination at page top */
+html[data-sdm-active="true"][data-sdm-effect="ambient"] body::before {
+  content: "" !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: radial-gradient(ellipse at 50% 0%, var(--sdm-link, #58a6ff) 0%, transparent 65%) !important;
+  opacity: calc(var(--sdm-effect-opacity, 0.5) * 0.16) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Frosted Glass: Smooth translucent blur for sticky headers and navigation */
+html[data-sdm-active="true"][data-sdm-effect="glass"] header,
+html[data-sdm-active="true"][data-sdm-effect="glass"] nav,
+html[data-sdm-active="true"][data-sdm-effect="glass"] [role="banner"],
+html[data-sdm-active="true"][data-sdm-effect="glass"] [role="navigation"],
+html[data-sdm-active="true"][data-sdm-effect="glass"] [data-test-id*="header"] {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  background-color: color-mix(in srgb, var(--sdm-bg, #121418) 84%, transparent) !important;
+}
+
+/* Deep Vignette: Soft focus vignette darkening screen edges */
+html[data-sdm-active="true"][data-sdm-effect="vignette"] body::before {
+  content: "" !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85) !important;
+  opacity: var(--sdm-effect-opacity, 0.5) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Aurora Mesh: Dual celestial gradients blending across page canvas */
+html[data-sdm-active="true"][data-sdm-effect="aurora"] body::before {
+  content: "" !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background:
+    radial-gradient(circle at 15% 15%, var(--sdm-link, #58a6ff) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, var(--sdm-surface-elevated, #242832) 0%, transparent 50%) !important;
+  opacity: calc(var(--sdm-effect-opacity, 0.5) * 0.18) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* ==========================================================================
+   5. Anti-Glare Warmth Overlay
+   ========================================================================== */
+#sdm-warmth-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2147483645 !important;
+  background-color: #ffaa00 !important;
+  opacity: var(--sdm-warmth-opacity, 0) !important;
+  mix-blend-mode: multiply !important;
+  transition: opacity 0.15s ease !important;
+}
+
+/* ==========================================================================
+   6. Cards, Panels, Modals, and Elevation
+   ========================================================================== */
+html[data-sdm-active="true"] [role="dialog"],
+html[data-sdm-active="true"] [role="menu"],
+html[data-sdm-active="true"] [role="listbox"],
+html[data-sdm-active="true"] [class*="modal"],
+html[data-sdm-active="true"] [class*="Modal"],
+html[data-sdm-active="true"] [class*="dropdown"],
+html[data-sdm-active="true"] [class*="Dropdown"],
+html[data-sdm-active="true"] [class*="popup"],
+html[data-sdm-active="true"] [class*="popover"],
+html[data-sdm-active="true"] [class*="tooltip"] {
+  background-color: var(--sdm-surface-elevated, #242832) !important;
+  color: var(--sdm-text, #e6edf3) !important;
+  border: 1px solid var(--sdm-border, rgba(255, 255, 255, 0.10)) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Typography Base */
+html[data-sdm-active="true"] h1,
+html[data-sdm-active="true"] h2,
+html[data-sdm-active="true"] h3,
+html[data-sdm-active="true"] h4,
+html[data-sdm-active="true"] h5,
+html[data-sdm-active="true"] h6 {
+  color: var(--sdm-text, #e6edf3) !important;
+}
+
+/* Form Inputs, Textareas, Selects */
+html[data-sdm-active="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="image"]),
+html[data-sdm-active="true"] textarea,
+html[data-sdm-active="true"] select {
+  background-color: var(--sdm-surface, #1a1d24) !important;
+  color: var(--sdm-text, #e6edf3) !important;
+  border: 1px solid var(--sdm-border, rgba(255, 255, 255, 0.10)) !important;
+}
+
+html[data-sdm-active="true"] input::placeholder,
+html[data-sdm-active="true"] textarea::placeholder {
+  color: var(--sdm-text-muted, #94a3b8) !important;
+}
+
+/* Links */
+html[data-sdm-active="true"] a {
+  color: var(--sdm-link, #58a6ff) !important;
+}
+
+/* ==========================================================================
+   7. Media Protection: Photos, Videos, and Canvas remain 100% natural
+   ========================================================================== */
+html[data-sdm-active="true"] img,
+html[data-sdm-active="true"] video,
+html[data-sdm-active="true"] canvas,
+html[data-sdm-active="true"] iframe,
+html[data-sdm-active="true"] picture,
+html[data-sdm-active="true"] embed,
+html[data-sdm-active="true"] object {
+  filter: brightness(var(--sdm-media-brightness, 92%)) contrast(1.02) !important;
+  background-color: transparent !important;
+}
+
+/* Fullscreen exceptions */
+html[data-sdm-active="true"] :fullscreen,
+html[data-sdm-active="true"] :-webkit-full-screen {
+  filter: none !important;
+}
+
+html[data-sdm-active="true"] :fullscreen video,
+html[data-sdm-active="true"] :-webkit-full-screen video {
+  filter: none !important;
+}
+
+/* Optional font weight booster */
+html[data-sdm-font-boost="true"] body,
+html[data-sdm-font-boost="true"] p,
+html[data-sdm-font-boost="true"] span,
+html[data-sdm-font-boost="true"] a {
+  font-weight: 500 !important;
+}
+
+/* Custom Dark Scrollbars */
+html[data-sdm-active="true"]::-webkit-scrollbar {
+  width: 12px !important;
+  height: 12px !important;
+  background-color: var(--sdm-bg, #121418) !important;
+}
+
+html[data-sdm-active="true"]::-webkit-scrollbar-track {
+  background-color: var(--sdm-bg, #121418) !important;
+}
+
+html[data-sdm-active="true"]::-webkit-scrollbar-thumb {
+  background-color: #374151 !important;
+  border-radius: 6px !important;
+  border: 3px solid var(--sdm-bg, #121418) !important;
+}
+
+html[data-sdm-active="true"]::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563 !important;
+}

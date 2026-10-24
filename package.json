@@ -1,0 +1,19 @@
+{
+  "name": "smart-dark-mode",
+  "version": "0.1.0",
+  "description": "Universal adaptive dark mode browser extension with real-time CSSOM interception, custom color studio, and visual atmosphere effects.",
+  "main": "background/service-worker.js",
+  "scripts": {
+    "test": "echo \"Ready for unpacked installation in Chromium browsers\""
+  },
+  "keywords": [
+    "dark-mode",
+    "browser-extension",
+    "chrome-extension",
+    "cssom",
+    "adaptive-theme",
+    "hsl"
+  ],
+  "author": "ticker-01",
+  "license": "MIT"
+}

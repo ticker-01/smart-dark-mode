@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Dark Engine - Test & Verification Page</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --surface: #ffffff;
+      --bg: #f3f4f6;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .tag.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-outline {
+      border-color: var(--border);
+      background: #ffffff;
+      color: var(--text);
+    }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #0f172a;
+    }
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header-bar">
+        <div class="profile">
+          <div class="avatar">SD</div>
+          <div>
+            <h1 style="margin: 0; font-size: 20px;">Light Mode Standard Page</h1>
+            <span style="color: var(--text-muted); font-size: 14px;">Simulating a modern bright interface</span>
+          </div>
+        </div>
+        <span class="tag success">Status: Active</span>
+      </div>
+      <div style="margin-top: 16px;">
+        <p>This is a standard bright white web page to verify Smart Dark Engine rendering. When the extension activates, the background transitions smoothly to a deep, glare-free dark canvas while maintaining element hierarchy, typography clarity, and color balance.</p>
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+          <button class="btn btn-primary">Primary Action</button>
+          <button class="btn btn-outline">Secondary Action</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Media and Photo Preservation</h2>
+      <p style="color: var(--text-muted);">Photos and illustrations must preserve authentic natural colors without becoming negative x-rays:</p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px;">
+        <svg width="120" height="80" style="background: #e2e8f0; border-radius: 8px;" viewBox="0 0 120 80">
+          <rect width="120" height="80" fill="#3b82f6" rx="8" />
+          <circle cx="60" cy="40" r="22" fill="#facc15" />
+          <polygon points="40,65 80,65 60,35" fill="#ef4444" />
+        </svg>
+        <div style="width: 120px; height: 80px; border-radius: 8px; background: linear-gradient(45deg, #ec4899, #f43f5e); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+          Gradient
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Data Table & Code Block</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>Default Value</th>
+            <th>Benefit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Brightness</td>
+            <td>94%</td>
+            <td>Prevents blinding high-intensity whites</td>
+          </tr>
+          <tr>
+            <td>Warmth / Sepia</td>
+            <td>0% - 24%</td>
+            <td>Reduces harsh blue light fatigue</td>
+          </tr>
+          <tr>
+            <td>Media Isolation</td>
+            <td>Active</td>
+            <td>Keeps photos and video natural</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 20px;">Code Sample</h3>
+      <pre><code>// Example configuration
+const engineConfig = {
+  theme: "charcoal",
+  brightness: 94,
+  contrast: 95,
+  antiGlare: true
+};</code></pre>
+    </div>
+  </div>
+</body>
+</html>

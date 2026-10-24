@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Dark Engine</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-name">Smart Dark</span>
+          <span class="engine-badge">Universal Engine v0.1.0</span>
+        </div>
+      </div>
+      <label class="switch" title="Toggle dark mode extension globally">
+        <input type="checkbox" id="masterToggle" checked>
+        <span class="slider round"></span>
+      </label>
+    </header>
+
+    <!-- Domain Card -->
+    <div class="card domain-card">
+      <div class="domain-info">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <div class="domain-labels">
+          <div class="domain-header-row">
+            <span class="domain-name" id="currentDomain">Loading...</span>
+            <span class="status-pill active" id="statusPill">Active</span>
+          </div>
+          <span class="domain-subtitle" id="domainSubtitle">HSL Compiled Mode</span>
+        </div>
+      </div>
+      <label class="switch-small" title="Toggle dark mode on current domain">
+        <input type="checkbox" id="domainToggle" checked>
+        <span class="slider-small round"></span>
+      </label>
+    </div>
+
+    <!-- Live Composite Preview Surface -->
+    <div class="preview-surface" id="livePreviewSurface">
+      <div class="preview-card" id="livePreviewCard">
+        <div class="preview-header">
+          <span class="preview-dot" id="livePreviewDot"></span>
+          <span class="preview-title" id="livePreviewTitle">Live Palette Preview</span>
+        </div>
+        <p class="preview-text" id="livePreviewText">High-contrast, eye-friendly typography</p>
+        <div class="preview-footer">
+          <span class="preview-badge" id="livePreviewBadge">Accent Element</span>
+          <span class="preview-muted-label" id="livePreviewMuted">Muted details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-nav">
+      <button type="button" class="tab-btn active" data-tab="tab-palettes">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+          <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+          <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+          <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
+        </svg>
+        <span>Palettes</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-atmosphere">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>Atmosphere</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-calibration">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Calibration</span>
+      </button>
+    </nav>
+
+    <!-- Tab 1: Palettes -->
+    <div class="tab-pane active" id="tab-palettes">
+      <div class="section-title">
+        <span>Dark Palette Presets</span>
+      </div>
+
+      <div class="theme-grid">
+        <button type="button" class="theme-btn active" data-theme="charcoal">
+          <span class="theme-swatch charcoal"></span>
+          <span class="theme-label">Charcoal</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme="oled">
+          <span class="theme-swatch oled"></span>
+          <span class="theme-label">Pure OLED</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme="midnight">
+          <span class="theme-swatch midnight"></span>
+          <span class="theme-label">Midnight</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme="warm">
+          <span class="theme-swatch warm"></span>
+          <span class="theme-label">Warm Amber</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme="forest">
+          <span class="theme-swatch forest"></span>
+          <span class="theme-label">Slate Forest</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme="cyberpunk">
+          <span class="theme-swatch cyberpunk"></span>
+          <span class="theme-label">Cyberpunk</span>
+        </button>
+      </div>
+
+      <div class="section-title">
+        <span>Custom Color Studio</span>
+      </div>
+
+      <div class="color-picker-grid">
+        <div class="color-picker-item">
+          <label for="customBgInput" class="color-picker-label">Background</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customBgInput" value="#121418" class="color-picker-input">
+            <span class="color-hex-val" id="customBgHex">#121418</span>
+          </div>
+        </div>
+        <div class="color-picker-item">
+          <label for="customSurfaceInput" class="color-picker-label">Surface Card</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customSurfaceInput" value="#1a1d24" class="color-picker-input">
+            <span class="color-hex-val" id="customSurfaceHex">#1a1d24</span>
+          </div>
+        </div>
+        <div class="color-picker-item">
+          <label for="customElevatedInput" class="color-picker-label">Elevated Panel</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customElevatedInput" value="#242832" class="color-picker-input">
+            <span class="color-hex-val" id="customElevatedHex">#242832</span>
+          </div>
+        </div>
+        <div class="color-picker-item">
+          <label for="customTextInput" class="color-picker-label">Primary Text</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customTextInput" value="#e6edf3" class="color-picker-input">
+            <span class="color-hex-val" id="customTextHex">#e6edf3</span>
+          </div>
+        </div>
+        <div class="color-picker-item">
+          <label for="customMutedInput" class="color-picker-label">Muted Text</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customMutedInput" value="#94a3b8" class="color-picker-input">
+            <span class="color-hex-val" id="customMutedHex">#94a3b8</span>
+          </div>
+        </div>
+        <div class="color-picker-item">
+          <label for="customAccentInput" class="color-picker-label">Accent Link</label>
+          <div class="color-picker-wrapper">
+            <input type="color" id="customAccentInput" value="#58a6ff" class="color-picker-input">
+            <span class="color-hex-val" id="customAccentHex">#58a6ff</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>Inspiration Seeds</span>
+      </div>
+
+      <div class="seed-grid">
+        <button type="button" class="seed-pill" data-seed="gold">
+          <span class="seed-swatch gold-seed"></span>
+          <span>Obsidian Gold</span>
+        </button>
+        <button type="button" class="seed-pill" data-seed="amethyst">
+          <span class="seed-swatch amethyst-seed"></span>
+          <span>Amethyst</span>
+        </button>
+        <button type="button" class="seed-pill" data-seed="ocean">
+          <span class="seed-swatch ocean-seed"></span>
+          <span>Oceanic</span>
+        </button>
+        <button type="button" class="seed-pill" data-seed="crimson">
+          <span class="seed-swatch crimson-seed"></span>
+          <span>Crimson</span>
+        </button>
+        <button type="button" class="seed-pill" data-seed="matrix">
+          <span class="seed-swatch matrix-seed"></span>
+          <span>Matrix</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 2: Atmosphere -->
+    <div class="tab-pane" id="tab-atmosphere">
+      <div class="section-title">
+        <span>Visual Atmosphere Effects</span>
+      </div>
+
+      <div class="atmosphere-list">
+        <button type="button" class="atmosphere-card active" data-effect="matte">
+          <div class="atmosphere-icon-box matte-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <div class="atmosphere-meta">
+            <span class="atmosphere-title">Clean Matte</span>
+            <span class="atmosphere-desc">Solid dark canvas for distraction-free reading</span>
+          </div>
+          <span class="atmosphere-check"></span>
+        </button>
+
+        <button type="button" class="atmosphere-card" data-effect="ambient">
+          <div class="atmosphere-icon-box ambient-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </div>
+          <div class="atmosphere-meta">
+            <span class="atmosphere-title">Ambient Glow</span>
+            <span class="atmosphere-desc">Soft celestial illumination at the top of the viewport</span>
+          </div>
+          <span class="atmosphere-check"></span>
+        </button>
+
+        <button type="button" class="atmosphere-card" data-effect="glass">
+          <div class="atmosphere-icon-box glass-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div class="atmosphere-meta">
+            <span class="atmosphere-title">Frosted Glass</span>
+            <span class="atmosphere-desc">Translucent backdrop blur on sticky navigation bars</span>
+          </div>
+          <span class="atmosphere-check"></span>
+        </button>
+
+        <button type="button" class="atmosphere-card" data-effect="vignette">
+          <div class="atmosphere-icon-box vignette-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+            </svg>
+          </div>
+          <div class="atmosphere-meta">
+            <span class="atmosphere-title">Cinematic Vignette</span>
+            <span class="atmosphere-desc">Darkened corner focus to reduce peripheral eye fatigue</span>
+          </div>
+          <span class="atmosphere-check"></span>
+        </button>
+
+        <button type="button" class="atmosphere-card" data-effect="aurora">
+          <div class="atmosphere-icon-box aurora-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+            </svg>
+          </div>
+          <div class="atmosphere-meta">
+            <span class="atmosphere-title">Aurora Mesh</span>
+            <span class="atmosphere-desc">Dual radial ambient gradients for an elegant aesthetic</span>
+          </div>
+          <span class="atmosphere-check"></span>
+        </button>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Atmosphere Intensity</span>
+          <span class="control-val" id="effectIntensityVal">50%</span>
+        </div>
+        <input type="range" id="effectIntensityInput" min="10" max="100" value="50" class="slider-range">
+      </div>
+    </div>
+
+    <!-- Tab 3: Calibration -->
+    <div class="tab-pane" id="tab-calibration">
+      <div class="section-title">
+        <span>Visual Calibration Engine</span>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Brightness</span>
+          <span class="control-val" id="brightnessVal">92%</span>
+        </div>
+        <input type="range" id="brightnessInput" min="60" max="120" value="92" class="slider-range">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Contrast</span>
+          <span class="control-val" id="contrastVal">92%</span>
+        </div>
+        <input type="range" id="contrastInput" min="70" max="130" value="92" class="slider-range">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Anti-Glare Warmth (Sepia)</span>
+          <span class="control-val" id="sepiaVal">0%</span>
+        </div>
+        <input type="range" id="sepiaInput" min="0" max="50" value="0" class="slider-range">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Color Saturation</span>
+          <span class="control-val" id="saturationVal">100%</span>
+        </div>
+        <input type="range" id="saturationInput" min="40" max="140" value="100" class="slider-range">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span class="control-title">Media Dimmer (Photos & Videos)</span>
+          <span class="control-val" id="mediaBrightnessVal">92%</span>
+        </div>
+        <input type="range" id="mediaBrightnessInput" min="50" max="100" value="92" class="slider-range">
+      </div>
+
+      <div class="extra-options">
+        <label class="checkbox-container">
+          <input type="checkbox" id="fontBoostInput">
+          <span class="custom-checkbox"></span>
+          <span class="checkbox-text">Enhance font boldness for thin text</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span class="shortcut-tip">Shortcut: Alt+Shift+D</span>
+      <button type="button" id="resetBtn" class="reset-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <polyline points="23 20 23 14 17 14"></polyline>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+        </svg>
+        Reset
+      </button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
