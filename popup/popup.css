@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Smart Dark Engine v0.1.0 - Popup Styling
+   Smart Dark Engine v0.2.0 - Popup Styling
    Precision dark UI with multi-tab customizer & live composite palette preview.
    ========================================================================== */
 
@@ -510,6 +510,11 @@ body {
 
 .atmosphere-card.active .atmosphere-icon-box svg {
   stroke: #58a6ff;
+}
+
+.atmosphere-card.active .ambilight-box svg {
+  stroke: #f43f5e;
+  filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.6));
 }
 
 .atmosphere-meta {

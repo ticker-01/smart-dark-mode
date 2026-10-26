@@ -1,7 +1,8 @@
 /**
- * Smart Dark Engine v0.1.0 - Popup Controller
+ * Smart Dark Engine v0.2.0 - Popup Controller
  * Manages tabbed navigation, 6 theme presets, 6-color custom studio,
- * inspiration seed palettes, 5 atmosphere effects, and visual calibration.
+ * inspiration seed palettes, 6 atmosphere effects (including reactive video ambilight),
+ * and visual calibration.
  */
 
 const DEFAULT_SETTINGS = {

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Smart Dark Engine v0.1.0 - Universal CSSOM & Omni-Surface Stylesheet
+   Smart Dark Engine v0.2.0 - Universal CSSOM & Omni-Surface Stylesheet
    Pure mathematical dark transformation with custom atmosphere effects.
    ========================================================================== */
 
@@ -14,6 +14,9 @@
   --sdm-media-brightness: 92%;
   --sdm-effect-opacity: 0.5;
   --sdm-warmth-opacity: 0;
+  --sdm-ambilight-color1: rgba(88, 166, 255, 0.25);
+  --sdm-ambilight-color2: rgba(163, 113, 247, 0.20);
+  --sdm-ambilight-glow: rgba(88, 166, 255, 0.35);
 }
 
 /* ==========================================================================
@@ -172,6 +175,31 @@ html[data-sdm-active="true"][data-sdm-effect="aurora"] body::before {
   opacity: calc(var(--sdm-effect-opacity, 0.5) * 0.18) !important;
   pointer-events: none !important;
   z-index: 0 !important;
+}
+
+/* Reactive Video Ambilight: Real-time dynamic room glow pulsing with video scene colors */
+html[data-sdm-active="true"][data-sdm-effect="ambilight"] body::before {
+  content: "" !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background:
+    radial-gradient(ellipse at 50% -5%, var(--sdm-ambilight-color1, rgba(88, 166, 255, 0.25)) 0%, transparent 65%),
+    radial-gradient(ellipse at 50% 105%, var(--sdm-ambilight-color2, rgba(163, 113, 247, 0.2)) 0%, transparent 65%),
+    radial-gradient(circle at 10% 50%, var(--sdm-ambilight-color1, rgba(88, 166, 255, 0.15)) 0%, transparent 55%),
+    radial-gradient(circle at 90% 50%, var(--sdm-ambilight-color2, rgba(163, 113, 247, 0.15)) 0%, transparent 55%) !important;
+  opacity: calc(var(--sdm-effect-opacity, 0.5) * 0.55) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  transition: background 0.15s ease-out !important;
+}
+
+/* Video aura in ambilight mode */
+html[data-sdm-active="true"][data-sdm-effect="ambilight"] video {
+  box-shadow: 0 0 calc(32px * var(--sdm-effect-opacity, 0.5)) var(--sdm-ambilight-glow, rgba(88, 166, 255, 0.35)) !important;
+  transition: box-shadow 0.2s ease-out !important;
 }
 
 /* ==========================================================================

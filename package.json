@@ -1,6 +1,6 @@
 {
   "name": "smart-dark-mode",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Universal adaptive dark mode browser extension with real-time CSSOM interception, custom color studio, and visual atmosphere effects.",
   "main": "background/service-worker.js",
   "scripts": {

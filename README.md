@@ -4,15 +4,25 @@ Universal adaptive dark mode browser extension for Chromium browsers.
 
 Smart Dark Engine translates web pages into a dark theme using real time CSSOM compilation and perceptual HSL mathematics. It does not use root invert filters and does not modify layout properties or corrupt photos and videos.
 
-Version 0.1.0
+Version 0.2.0
 
 ## Visual Demonstration
 
 ![Light Mode vs Smart Dark Mode](assets/screenshots/comparison-demo.png)
 
+## Reactive Video Ambilight Cinema Mode
+
+Smart Dark Engine samples colors in real time from playing videos using an offscreen canvas and smoothly casts matching ambient illumination onto the background.
+
+![Reactive Video Ambilight Cinema Demonstration](assets/screenshots/ambilight-demo.png)
+
 ## Extension Interface
 
 ![Smart Dark Engine Popup Interface](assets/screenshots/popup-ui.png)
+
+## Atmosphere and Effects Panel
+
+![Atmosphere Effects and Ambilight](assets/screenshots/popup-atmosphere.png)
 
 ## Architecture Pipeline
 
@@ -30,6 +40,7 @@ flowchart TD
     G --> H["SVG Icon Contrast Preservation"]
     H --> I["Media Protection Pass"]
     I --> J["Injected Mirror Stylesheet"]
+    J --> K["Reactive Ambilight Video Loop"]
 ```
 
 ## Color Transformation Model
@@ -68,12 +79,13 @@ Fine tune individual color layers:
 * Muted Text
 * Accent Link
 
-### 5. Five Atmosphere Visual Effects
+### 5. Six Atmosphere Visual Effects
 * Clean Matte: Flat dark surface
 * Ambient Glow: Radial illumination at the top of the screen
 * Frosted Glass: Translucent blur on sticky navigation headers
 * Cinematic Vignette: Darkened edge focus reducing peripheral glare
 * Aurora Mesh: Dual gradient mesh illumination
+* Reactive Video Ambilight: Real time canvas color sampling from playing videos that dynamically casts smooth ambient glow and cinema aura onto the background
 
 ### 6. Calibration Controls
 * Brightness: 60% to 120%
@@ -104,7 +116,7 @@ Fine tune individual color layers:
 ```
 smart-dark-mode/
   manifest.json               Extension manifest v3
-  package.json                Package metadata v0.1.0
+  package.json                Package metadata v0.2.0
   LICENSE                     MIT License
   README.md                   Project documentation
   background/
@@ -123,9 +135,11 @@ smart-dark-mode/
     icon128.png
   assets/
     screenshots/
+      ambilight-demo.png        Reactive video ambilight cinema demonstration
       architecture-pipeline.png Visual pipeline diagram
       architecture-pipeline.svg Vector pipeline diagram
       comparison-demo.png       Side by side architecture demonstration
+      popup-atmosphere.png      Atmosphere and ambilight settings screenshot
       popup-ui.png              Interface screenshot
 ```
 

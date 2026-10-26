@@ -1,5 +1,5 @@
 /**
- * Smart Dark Engine v0.1.0 - Background Service Worker
+ * Smart Dark Engine v0.2.0 - Background Service Worker
  * Manages cross-origin stylesheet requests, global preferences, and keyboard hotkeys.
  */
 

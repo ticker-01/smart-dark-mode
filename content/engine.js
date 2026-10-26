@@ -1,7 +1,7 @@
 /**
- * Smart Dark Engine v0.1.0 - Universal CSSOM Compiler & Omni-Surface Harmonizer
- * Features real-time HSL color compilation, custom 6-color studio,
- * background atmosphere effects, and universal SVG/button visibility preservation.
+ * Smart Dark Engine v0.2.0 - Universal CSSOM Compiler & Omni-Surface Harmonizer
+ * Features real-time HSL color compilation, reactive video ambilight room glow,
+ * custom 6-color studio, and universal SVG/button visibility preservation.
  */
 
 (function () {
@@ -523,7 +523,177 @@
   }
 
   /* ==========================================================================
-     4. Lifecycle & Runtime State
+     4. Reactive Video Ambilight Engine
+     Extracts real-time color tones from HTML5 videos and dynamically casts
+     smooth background room lighting synced with playing scenes.
+     ========================================================================== */
+
+  let ambilightRunning = false;
+  let ambilightRafId = null;
+  let ambilightCanvas = null;
+  let ambilightCtx = null;
+  let lastAmbilightSample = 0;
+  let curR1 = 88, curG1 = 166, curB1 = 255;
+  let curR2 = 163, curG2 = 113, curB2 = 247;
+  let activeVideo = null;
+
+  function findPlayingVideo() {
+    const videos = document.querySelectorAll('video');
+    for (let i = 0; i < videos.length; i++) {
+      const v = videos[i];
+      if (!v.paused && !v.ended && v.readyState >= 2 && v.videoWidth > 0 && v.videoHeight > 0) {
+        return v;
+      }
+    }
+    for (let i = 0; i < videos.length; i++) {
+      const v = videos[i];
+      if (v.readyState >= 1 && v.videoWidth > 0) {
+        return v;
+      }
+    }
+    return null;
+  }
+
+  function boostAmbilightColor(r, g, b) {
+    const max = Math.max(r, g, b);
+    if (max < 16) return { r: 18, g: 20, b: 24 };
+
+    const avg = (r + g + b) / 3;
+    const factor = 1.35;
+    const newR = Math.min(255, Math.max(0, Math.round(avg + (r - avg) * factor)));
+    const newG = Math.min(255, Math.max(0, Math.round(avg + (g - avg) * factor)));
+    const newB = Math.min(255, Math.max(0, Math.round(avg + (b - avg) * factor)));
+    return { r: newR, g: newG, b: newB };
+  }
+
+  function setAmbilightCSS(r1, g1, b1, r2, g2, b2) {
+    const root = document.documentElement;
+    if (!root) return;
+    root.style.setProperty('--sdm-ambilight-color1', `rgb(${r1}, ${g1}, ${b1})`);
+    root.style.setProperty('--sdm-ambilight-color2', `rgb(${r2}, ${g2}, ${b2})`);
+    root.style.setProperty('--sdm-ambilight-glow', `rgba(${r1}, ${g1}, ${b1}, 0.35)`);
+  }
+
+  function fadeToRestingAmbilight() {
+    const theme = getActiveThemePalette();
+    const pLink = parseColor(theme.link) || { r: 88, g: 166, b: 255 };
+    const pElev = parseColor(theme.surfaceElevated) || { r: 36, g: 40, b: 50 };
+
+    const alpha = 0.08;
+    curR1 = Math.round(curR1 * (1 - alpha) + pLink.r * alpha);
+    curG1 = Math.round(curG1 * (1 - alpha) + pLink.g * alpha);
+    curB1 = Math.round(curB1 * (1 - alpha) + pLink.b * alpha);
+
+    curR2 = Math.round(curR2 * (1 - alpha) + pElev.r * alpha);
+    curG2 = Math.round(curG2 * (1 - alpha) + pElev.g * alpha);
+    curB2 = Math.round(curB2 * (1 - alpha) + pElev.b * alpha);
+
+    setAmbilightCSS(curR1, curG1, curB1, curR2, curG2, curB2);
+  }
+
+  function sampleAmbilightTick() {
+    if (!ambilightRunning) return;
+
+    const video = (activeVideo && !activeVideo.paused && !activeVideo.ended && activeVideo.readyState >= 2)
+      ? activeVideo
+      : findPlayingVideo();
+
+    if (!video || video.paused || video.ended || video.readyState < 2) {
+      fadeToRestingAmbilight();
+      return;
+    }
+
+    activeVideo = video;
+
+    if (!ambilightCanvas) {
+      ambilightCanvas = document.createElement('canvas');
+      ambilightCanvas.width = 16;
+      ambilightCanvas.height = 9;
+      ambilightCtx = ambilightCanvas.getContext('2d', { willReadFrequently: true });
+    }
+
+    try {
+      ambilightCtx.drawImage(video, 0, 0, 16, 9);
+      const data = ambilightCtx.getImageData(0, 0, 16, 9).data;
+
+      // Sample top region (rows 0-2: 48 pixels)
+      let tR = 0, tG = 0, tB = 0, tCount = 0;
+      for (let i = 0; i < 16 * 3 * 4; i += 4) {
+        tR += data[i];
+        tG += data[i + 1];
+        tB += data[i + 2];
+        tCount++;
+      }
+      tR = Math.round(tR / tCount);
+      tG = Math.round(tG / tCount);
+      tB = Math.round(tB / tCount);
+
+      // Sample bottom region (rows 5-8: 64 pixels)
+      let bR = 0, bG = 0, bB = 0, bCount = 0;
+      for (let i = 16 * 5 * 4; i < 16 * 9 * 4; i += 4) {
+        bR += data[i];
+        bG += data[i + 1];
+        bB += data[i + 2];
+        bCount++;
+      }
+      bR = Math.round(bR / bCount);
+      bG = Math.round(bG / bCount);
+      bB = Math.round(bB / bCount);
+
+      const target1 = boostAmbilightColor(tR, tG, tB);
+      const target2 = boostAmbilightColor(bR, bG, bB);
+
+      const smooth = 0.28;
+      curR1 = Math.round(curR1 * (1 - smooth) + target1.r * smooth);
+      curG1 = Math.round(curG1 * (1 - smooth) + target1.g * smooth);
+      curB1 = Math.round(curB1 * (1 - smooth) + target1.b * smooth);
+
+      curR2 = Math.round(curR2 * (1 - smooth) + target2.r * smooth);
+      curG2 = Math.round(curG2 * (1 - smooth) + target2.g * smooth);
+      curB2 = Math.round(curB2 * (1 - smooth) + target2.b * smooth);
+
+      setAmbilightCSS(curR1, curG1, curB1, curR2, curG2, curB2);
+    } catch (e) {
+      fadeToRestingAmbilight();
+    }
+  }
+
+  let ambilightTimer = null;
+
+  function startAmbilight() {
+    if (ambilightRunning) return;
+    ambilightRunning = true;
+    bindVideoListeners();
+    // Set immediate initial colors
+    setAmbilightCSS(curR1, curG1, curB1, curR2, curG2, curB2);
+    sampleAmbilightTick();
+    if (ambilightTimer) clearInterval(ambilightTimer);
+    ambilightTimer = setInterval(sampleAmbilightTick, 50);
+  }
+
+  function stopAmbilight() {
+    if (!ambilightRunning) return;
+    ambilightRunning = false;
+    if (ambilightTimer) {
+      clearInterval(ambilightTimer);
+      ambilightTimer = null;
+    }
+    activeVideo = null;
+  }
+
+  function bindVideoListeners() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach((v) => {
+      if (!v._sdmAmbilightBound) {
+        v._sdmAmbilightBound = true;
+        v.addEventListener('play', () => { activeVideo = v; });
+        v.addEventListener('playing', () => { activeVideo = v; });
+      }
+    });
+  }
+
+  /* ==========================================================================
+     5. Lifecycle & Runtime State
      ========================================================================== */
 
   function isDomainExcluded(host, list) {
@@ -567,6 +737,12 @@
     const effectIntensity = (settings.effectIntensity || 50) / 100;
     root.style.setProperty('--sdm-effect-opacity', effectIntensity.toFixed(2));
 
+    if (effect === 'ambilight') {
+      startAmbilight();
+    } else {
+      stopAmbilight();
+    }
+
     const sepiaVal = settings.sepia || 0;
     const warmthAlpha = (sepiaVal / 50) * 0.18;
     root.style.setProperty('--sdm-warmth-opacity', warmthAlpha.toFixed(3));
@@ -602,6 +778,8 @@
     root.removeAttribute('data-sdm-active');
     root.removeAttribute('data-sdm-effect');
     root.removeAttribute('data-sdm-font-boost');
+
+    stopAmbilight();
 
     if (mirrorStyleEl) {
       mirrorStyleEl.textContent = '';
@@ -653,6 +831,9 @@
         recompileTimer = setTimeout(() => {
           processInlineStyles();
           scanAndNeutralizeLightSurfaces();
+          if (currentSettings.effect === 'ambilight') {
+            bindVideoListeners();
+          }
         }, 150);
       }
     });
